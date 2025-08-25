@@ -71,8 +71,12 @@ jobs:
           ./node_modules/.bin/mochawesome-merge ./artifacts/**/*.json > ./public/merged-report.json
           ./node_modules/.bin/marge ./public/merged-report.json --reportDir ./public --reportFilename index.html
 
+      - name: Debug public folder
+        run: ls -R ./public
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          force_orphan: true
