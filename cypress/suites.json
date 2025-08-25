@@ -1,0 +1,9 @@
+{
+    "homepage":"e2e/homepage.spec.js",
+    "e2e":"e2e/**/*",
+    "bookDemo":"e2e/bookDemo.spec.js",
+    "404":"e2e/404Page.spec.js",
+    "mobile":"responsiveness/mobile.spec.js",
+    "tablet":"responsiveness/tablet&desktop.spec.js",
+    "desktop":"responsiveness/tablet&desktop.spec.js"
+}

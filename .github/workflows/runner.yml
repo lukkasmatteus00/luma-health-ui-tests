@@ -1,0 +1,78 @@
+name: Run Cypress Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  mobile-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/run-cypress
+        with:
+          platform: mobile
+
+  tablet-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/run-cypress
+        with:
+          platform: tablet
+
+  desktop-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/run-cypress
+        with:
+          platform: desktop
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/run-cypress
+        with:
+          platform: e2e
+
+  deploy-report:
+    name: Deploy Consolidated Mochawesome Report
+    needs: [desktop-tests, mobile-tests, tablet-tests, e2e-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Download JSON reports
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Install merge tools
+        run: |
+          npm install --save-dev mochawesome-merge marge
+        
+      - name: Merge reports and generate HTML
+        run: |
+          mkdir -p ./public
+          ./node_modules/.bin/mochawesome-merge ./artifacts/**/*.json > ./public/merged-report.json
+          ./node_modules/.bin/marge ./public/merged-report.json --reportDir ./public --reportFilename index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

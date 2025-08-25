@@ -1,0 +1,44 @@
+name: "Steps to run Cypress"
+description: "Runs tests and uploads reports"
+inputs:
+  platform:
+    description: "Platform to run tests (mobile, tablet, desktop, e2e)"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      shell: bash
+      run: npm install
+
+    - name: Run Cypress tests
+      shell: bash
+      run: npm run test ${{ inputs.platform }}:headless:-electron
+
+    - name: Upload HTML Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: mochawesome-html-report-${{ inputs.platform }}
+        path: cypress/reports_html/
+
+    - name: Upload JSON Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: mochawesome-${{ inputs.platform }}-json
+        path: cypress/reports/mocha-report.json
+
+    - name: Upload Screenshots
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cypress-screenshots-${{ inputs.platform }}
+        path: cypress/screenshots/

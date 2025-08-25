@@ -1,0 +1,32 @@
+[
+    {
+        "nav": "Platform",
+        "url": "/patient-success-platform/",
+        "title": "The Patient Success Platform",
+        "isIframe": true
+    },
+    {
+        "nav": "Who We Serve",
+        "url": "/who-we-serve/",
+        "title": "Supporting success for 750+ healthcare organizations",
+        "isIframe": true
+    },
+    {
+        "nav": "Integration",
+        "url": "/integrations-2/",
+        "title": "Keeping your systems of record the source of truth.",
+        "isIframe": true
+    },
+    {
+        "nav": "Learn",
+        "url": "/learn/",
+        "title": "Learnings from the Luma Community",
+        "isIframe": false
+    },
+    {
+        "nav": "About us",
+        "url": "/about-us/",
+        "title": "Meet Luma",
+        "isIframe": false
+    }
+]
